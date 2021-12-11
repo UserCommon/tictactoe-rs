@@ -138,12 +138,13 @@ pub fn make_best_move(field: &mut Field) -> Move{
     let mut best_move = Move{row: -1, col: -1};
     for i in 0..3 as usize {
         for j in 0..3 as usize {
-            if field.field[i][j] == EMPTY {
-                field.field[i][j] = COMPUTER;
+            let mut tmp_field = field.clone();
+            if tmp_field.field[i][j] == EMPTY {
+                tmp_field.field[i][j] = COMPUTER;
 
-                let move_val = minimax(field, 1, true);
+                let move_val = minimax(&mut tmp_field, 0, false);
 
-                field.field[i][j] = EMPTY;
+                tmp_field.field[i][j] = EMPTY;
 
                 if move_val > best_val {
                     best_move.row = i as i32;
@@ -161,10 +162,10 @@ fn minimax(field: &mut Field, depth: i32, is_max: bool) -> i32{
     let score = score(field);
 
     match score {
-        10 => return 10,
-        -10 => return -10,
-        0 => return 0,
-        _ => (),
+        Some(10) => return 10 - depth,
+        Some(-10) => return -10,
+        Some(0) => return 0, // <----- PROBLEM
+        _ => ()
     }
 
     if is_max {
@@ -193,19 +194,17 @@ fn minimax(field: &mut Field, depth: i32, is_max: bool) -> i32{
         }
         return best;
     }
-    0
 }
 
 
-
-fn score(field: &Field) -> i32 {
+fn score(field: &Field) -> Option<i32> {
     let game_status = field.is_win();
-    return if game_status == COMPUTER_WINS {
-        10
-    } else if game_status == PLAYER_WINS {
-        -10
-    } else{
-        0
+
+    return match game_status {
+        COMPUTER_WINS => Some(10),
+        PLAYER_WINS   => Some(-10),
+        DRAW          => Some(0),
+        _             => None
     }
 }
 

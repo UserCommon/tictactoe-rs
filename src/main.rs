@@ -9,5 +9,4 @@ fn main() {
     let mut field = Field::default();
     field.draw();
     game.event_loop(&mut field);
-
 }
