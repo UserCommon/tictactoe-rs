@@ -48,9 +48,7 @@ impl Gameplay {
     }
 
     fn computer_step(&mut self, field: &mut Field) {
-        println!("{:?}", field);
         let res = make_best_move(field);
-        println!("{:?}", res);
         field.field[res.row as usize][res.col as usize] = COMPUTER;
     }
 

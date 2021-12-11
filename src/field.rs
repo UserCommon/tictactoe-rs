@@ -164,7 +164,7 @@ fn minimax(field: &mut Field, depth: i32, is_max: bool) -> i32{
     match score {
         Some(10) => return 10 - depth,
         Some(-10) => return -10,
-        Some(0) => return 0, // <----- PROBLEM
+        Some(0) => return 0,
         _ => ()
     }
 
